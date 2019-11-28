@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 flag_force=0
 flag_help=0
