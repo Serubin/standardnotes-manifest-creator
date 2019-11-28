@@ -2,6 +2,7 @@
 
 flag_force=0
 flag_help=0
+flag_submodules=0
 
 repo=""
 target=""
@@ -12,13 +13,14 @@ name=""
 id=""
 
 # process arguments
-set -- $(getopt "hft:a:v:i::n" "$@")
+set -- $(getopt "hfst:a:v:i::n" "$@")
 
 while [ $# -gt 0 ]; do
     echo "op $1 $2 --- $#"
     case "$1" in
       (-h) flag_help=1            ;;
       (-f) flag_force=1           ;;
+      (-s) flag_submodules=1      ;;
       (-t) type="$2";       shift ;;
       (-a) area="$2";       shift ;;
       (-v) version="$2";    shift ;;
@@ -58,6 +60,7 @@ function printHelp () {
     echo "    -v                        Extension Version: defaults to package.json"
     echo "    -i                        Identifier: defaults to net.serubin.<repo-tail>"
     echo "    -n                        Name: defaults to Repo Tail"
+    echo "    -s                        Use submodules"
 
     exit
 }
@@ -71,7 +74,11 @@ function cloneRepo () {
     exit
   fi
 
-  git clone ${repo} ${target}
+  if [[ ${flag_submodules} == "1" ]]; then
+    git submodule add ${repo} ${target}
+  else
+    git clone ${repo} ${target}
+  fi
 }
 
 ##
