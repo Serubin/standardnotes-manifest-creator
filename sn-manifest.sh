@@ -16,7 +16,6 @@ id=""
 set -- $(getopt "hfst:a:v:i::n" "$@")
 
 while [ $# -gt 0 ]; do
-    echo "op $1 $2 --- $#"
     case "$1" in
       (-h) flag_help=1            ;;
       (-f) flag_force=1           ;;

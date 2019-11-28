@@ -1,0 +1,3 @@
+[submodule "plus-editor"]
+	path = plus-editor
+	url = https://github.com/sn-extensions/plus-editor.git
