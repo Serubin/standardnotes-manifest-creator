@@ -67,7 +67,6 @@ function printHelp () {
 ##
 # clones git repo - checks if repo is sn-ext
 function cloneRepo () {
-  echo ${repo} ${flag_force}
   if [[ ! ${repo} != "https://github.com/sn-extensions*" ]] && [[ ${flag_force} != "1" ]]; then
     echo "This is not an Standard Note Extension - add -f to override"
     exit
