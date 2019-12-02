@@ -92,7 +92,8 @@ function generateManifest () {
         "content_type": "SN|${type}",
         "area": "${area}",
         "version": "${version}",
-        "url": "/extensions/${name}/"
+        "url": "/extensions/${name}/",
+        "github": "${repo}"
     }
 EOL
 }
