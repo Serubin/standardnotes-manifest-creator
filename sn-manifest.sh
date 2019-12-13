@@ -11,9 +11,10 @@ area=""
 version=""
 name=""
 id=""
+ref="master"
 
 # process arguments
-set -- $(getopt "hfst:a:v:i::n" "$@")
+set -- $(getopt "hfst:a:v:i:n:r:" "$@")
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -25,6 +26,7 @@ while [ $# -gt 0 ]; do
       (-v) version="$2";    shift ;;
       (-i) id="$2";         shift ;;
       (-n) name="$2";       shift ;;
+      (-r) ref="$2";       shift ;;
       (--) shift; break           ;;
       (*)  break                  ;;
     esac
@@ -74,8 +76,10 @@ function cloneRepo () {
 
   if [[ ${flag_submodules} == "1" ]]; then
     git submodule add ${repo} ${target}
+    cd ${target} && git checkout ${ref} && cd -
   else
     git clone ${repo} ${target}
+    cd ${target} && git checkout ${ref} && cd -
   fi
 }
 
