@@ -89,6 +89,10 @@ function cloneRepo () {
 function generateManifest () {
 
   human_name=$(echo ${name} | tr '-' ' ' | sed -e 's/\b\(.\)/\u\1/g')
+  if [[ $index == "" ]]; then
+    index="index.html"
+  fi
+
   cat >> ${target}/ext.json << EOL
     {
         "identifier": "org.sn-ext.${name}",
@@ -97,6 +101,7 @@ function generateManifest () {
         "area": "${area}",
         "version": "${version}",
         "url": "/extensions/${name}/",
+        "index": "${index}",
         "github": "${repo}"
     }
 EOL
@@ -119,7 +124,8 @@ function getRepoName () {
 function getJsonAttr () {
   file=$1
   attr=$2
-  echo $(cat ${target}/${file} | grep "${attr}" | xargs | sed -e "s/${attr}: //" | sed -e "s/,//")
+  #echo $(cat ${target}/${file} | grep "${attr}" | xargs | sed -e "s/${attr}: //" | sed -e "s/,//")
+  jq "${attr} | select( . != null )" ${target}/${file} | sed -e 's/"//g'
 }
 
 if [[ ${flag_help} == "1" ]]; then
@@ -137,11 +143,13 @@ fi
 cloneRepo
 
 if [[ ${version} == "" ]]; then
-  version=$(getJsonAttr "package.json" "version")
+  version=$(getJsonAttr "package.json" ".version")
 fi
 if [[ ${id} == "" ]]; then
-  id=$(getJsonAttr "package.json" "name")
+  id=$(getJsonAttr "package.json" ".name")
 fi
+
+index=$(getJsonAttr "package.json" ".sn.main")
 
 generateManifest
 
